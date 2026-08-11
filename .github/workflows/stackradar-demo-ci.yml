@@ -1,0 +1,58 @@
+name: StackRadar Demo CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stackradar-demo-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: StackRadar Demo CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DB_CONNECTION: sqlite
+      LOG_CHANNEL: single
+    steps:
+      - name: Check out the exact revision
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.5
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: bcmath, curl, fileinfo, gd, ldap, mbstring, pdo_sqlite, sqlite3, xml, zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate Composer metadata
+        run: composer validate --no-check-publish --no-interaction
+
+      - name: Install locked dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare SQLite application environment
+        run: |
+          cp .env.testing.example .env
+          cp .env.testing.example .env.testing
+          touch database/database.sqlite
+          php artisan key:generate
+          php artisan passport:keys
+
+      - name: Run tests
+        run: php artisan test
+
+      - name: Run PHPStan
+        run: composer analyse:phpstan
+
+      - name: Run PHPMD
+        run: composer analyse:phpmd

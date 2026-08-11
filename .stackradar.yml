@@ -1,0 +1,27 @@
+version: 1
+
+automerge:
+  minimum_score: 80
+  soak_seconds: 900
+
+changes:
+  test_edits: score
+
+ci:
+  workflow: stackradar-demo-ci.yml
+  required_check: StackRadar Demo CI
+
+verification:
+  environment:
+    DB_CONNECTION: sqlite
+    LOG_CHANNEL: single
+  setup:
+    - [cp, .env.testing.example, .env]
+    - [cp, .env.testing.example, .env.testing]
+    - [touch, database/database.sqlite]
+  commands:
+    - [php, artisan, key:generate]
+    - [php, artisan, passport:keys]
+    - [php, artisan, test]
+    - [composer, analyse:phpstan]
+    - [composer, analyse:phpmd]

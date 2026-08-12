@@ -31,7 +31,7 @@ jobs:
         with:
           php-version: '8.5'
           extensions: bcmath, curl, fileinfo, gd, ldap, mbstring, pdo_sqlite, sqlite3, xml, zip
-          coverage: none
+          coverage: ${{ github.event_name == 'push' && 'xdebug' || 'none' }}
           tools: composer:v2
 
       - name: Validate Composer metadata
@@ -50,6 +50,38 @@ jobs:
 
       - name: Run tests
         run: php artisan test
+
+      - name: Collect reusable focused baseline coverage
+        if: github.event_name == 'push'
+        env:
+          XDEBUG_MODE: coverage
+        run: >-
+          php -d memory_limit=-1 vendor/bin/phpunit
+          tests/Feature/Settings/ShowSetUpPageTest.php
+          tests/Feature/Livewire/SlackSettingsFormAuthorizationTest.php
+          --coverage-filter vendor/guzzlehttp/guzzle
+          --coverage-php=/tmp/stackradar-coverage.php
+
+      - name: Export dependency coverage index
+        if: github.event_name == 'push'
+        run: |
+          php .github/stackradar/export-baseline-coverage.php \
+            vendor/autoload.php \
+            /tmp/stackradar-coverage.php \
+            '${{ github.repository }}' \
+            '${{ github.sha }}' \
+            '${{ github.run_id }}' \
+            guzzlehttp/guzzle \
+            /tmp/stackradar-baseline-coverage
+
+      - name: Upload reusable baseline coverage
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stackradar-baseline-coverage
+          path: /tmp/stackradar-baseline-coverage/*.json
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Run PHPStan
         run: composer analyse:phpstan

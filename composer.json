@@ -35,7 +35,7 @@
     "enshrined/svg-sanitize": "^0.22.0",
     "erusev/parsedown": "^1.7",
     "fakerphp/faker": "^1.24",
-    "guzzlehttp/guzzle": "^7.0.1",
+    "guzzlehttp/guzzle": "7.11.1",
     "intervention/image": "^2.5",
     "javiereguiluz/easyslugger": "^1.0",
     "laravel-notification-channels/google-chat": "^3.0",

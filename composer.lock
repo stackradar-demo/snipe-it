@@ -1321,16 +1321,16 @@
         },
         {
             "name": "eduardokum/laravel-mail-auto-embed",
-            "version": "2.13",
+            "version": "2.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eduardokum/laravel-mail-auto-embed.git",
-                "reference": "eab2c5ef2f0ab7c4f1f8c1eb9666ed813e7c5368"
+                "reference": "50a5023878d70f8fef193c282931c4a1b660092b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eduardokum/laravel-mail-auto-embed/zipball/eab2c5ef2f0ab7c4f1f8c1eb9666ed813e7c5368",
-                "reference": "eab2c5ef2f0ab7c4f1f8c1eb9666ed813e7c5368",
+                "url": "https://api.github.com/repos/eduardokum/laravel-mail-auto-embed/zipball/50a5023878d70f8fef193c282931c4a1b660092b",
+                "reference": "50a5023878d70f8fef193c282931c4a1b660092b",
                 "shasum": ""
             },
             "require": {
@@ -1379,7 +1379,7 @@
             ],
             "support": {
                 "issues": "https://github.com/eduardokum/laravel-mail-auto-embed/issues",
-                "source": "https://github.com/eduardokum/laravel-mail-auto-embed/tree/2.13"
+                "source": "https://github.com/eduardokum/laravel-mail-auto-embed/tree/2.13.1"
             },
             "funding": [
                 {
@@ -1387,7 +1387,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-07T19:26:10+00:00"
+            "time": "2026-06-08T19:33:17+00:00"
         },
         {
             "name": "egulias/email-validator",
